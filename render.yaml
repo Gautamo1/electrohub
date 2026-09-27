@@ -1,0 +1,29 @@
+# Render Blueprint — deploys ElectroHub as a SINGLE web service
+# (Express API + React production build) backed by a Render PostgreSQL database.
+services:
+  - type: web
+    name: electrohub
+    runtime: node
+    plan: free
+    region: oregon
+    rootDir: .
+    buildCommand: npm install --omit=dev --prefix server && npm ci --prefix client && npm run build --prefix client
+    startCommand: npm start --prefix server
+    healthCheckPath: /api/health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: NODE_VERSION
+        value: 20.18.1
+      - key: SKIP_DB_INIT
+        value: "false"
+      - key: DATABASE_URL
+        fromDatabase:
+          name: electrohub-db
+          property: connectionString
+
+databases:
+  - name: electrohub-db
+    databaseName: electrohub
+    plan: free
+    region: oregon

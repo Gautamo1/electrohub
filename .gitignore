@@ -1,0 +1,37 @@
+# Dependencies
+node_modules/
+
+# Builds
+dist/
+build/
+
+# Environment secrets — never commit
+.env
+.env.local
+.env.*.local
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+*.log
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Misc
+coverage/
+*.tsbuildinfo
+
+# Local run artifacts
+srv.out
+srv.err
+install-*.out
+install-*.err
+install-*.done
+install-*.log
+.playwright-mcp/
+pg-reset.*
