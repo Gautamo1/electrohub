@@ -13,8 +13,17 @@ const connectionString =
   process.env.DATABASE_URL ||
   'postgresql://postgres:***@localhost:5432/electrohub';
 
-// Render (and other managed providers) require SSL; local dev usually does not.
-const needsSsl = /render\.com|sslmode=require/i.test(connectionString);
+// Render (and other managed providers) require TLS on every connection,
+// including the short internal host (dpg-xxxx-a). Local dev uses no TLS.
+// TLS is enabled via the pool `ssl` option — never via `?sslmode=` in the URL,
+// because pg >= 8.14 aliases `require` to `verify-full`, which fails on Render.
+let dbHost = 'localhost';
+try {
+  dbHost = new URL(connectionString).hostname;
+} catch {
+  /* leave as localhost; the pool will report the parse/connection error */
+}
+const needsSsl = !/^localhost$|^127\.|^::1$/i.test(dbHost);
 
 const pool = new Pool({
   connectionString,

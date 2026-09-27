@@ -27,6 +27,13 @@ be pasted by the account owner (never commit it):
 - `npm run --prefix` does not put `client/node_modules/.bin` on PATH → `npm run build`
   goes through `client/scripts/vite-build.mjs`, which locates the vite CLI in either
   `client/node_modules` or the repo-root `node_modules`.
+- `pg` >= 8.14 treats `?sslmode=require` in the URL as `verify-full`, which breaks against
+  Render's cert chain → do NOT put `sslmode=` in `DATABASE_URL`; `server/config/db.js`
+  enables TLS via the pool `ssl: { rejectUnauthorized: false }` option instead.
+- Use the **Internal connection string** exactly as shown in the dashboard. Its host is the
+  short internal name `dpg-daseg5l9fdbs73d3d2e0-a` (no `.oregon-postgres.render.com` suffix).
+  The public domain routes to an external proxy, which this DB's empty IP-allowlist rejects
+  ("Connection terminated unexpectedly").
 - The Render service was created via API and Render's GitHub app is NOT installed on the
   repo, so **pushes do not auto-deploy**. Trigger deploys manually (dashboard/CLI) or
   install the Render GitHub app on Gautamo1/electrohub to enable auto-deploy.
