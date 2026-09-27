@@ -8,6 +8,7 @@
     "dev:server": "npm run dev --prefix server",
     "dev:client": "npm run dev --prefix client",
     "build": "npm run build --prefix client",
+    "build:render": "cd server && npm ci --omit=dev && cd ../client && npm ci && npm run build",
     "start": "npm start --prefix server",
     "db:init": "npm run db:init --prefix server",
     "postinstall": "npm install --prefix server && npm install --prefix client"

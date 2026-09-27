@@ -7,7 +7,7 @@ services:
     plan: free
     region: oregon
     rootDir: .
-    buildCommand: npm install --omit=dev --prefix server && npm ci --prefix client && npm run build --prefix client
+    buildCommand: npm run build:render
     startCommand: npm start --prefix server
     healthCheckPath: /api/health
     envVars:
