@@ -84,6 +84,13 @@ async function main() {
       await initDatabase();
     } catch (err) {
       console.error('Database initialization failed:', err.message);
+      if (process.env.DB_DIAGNOSTICS === 'true') {
+        try {
+          await require('./db/diagnostics').runDbDiagnostics();
+        } catch (diagErr) {
+          console.error('[diag] crashed:', diagErr.message);
+        }
+      }
       if (process.env.NODE_ENV === 'production') {
         console.error('Exiting — production requires a working database.');
         process.exit(1);
